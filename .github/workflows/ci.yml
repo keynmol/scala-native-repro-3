@@ -1,0 +1,28 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build and Test
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout current branch (full)
+        uses: actions/checkout@v2
+      - name: Setup Java and Scala
+        uses: olafurpg/setup-scala@v10
+      - name: Setup (Linux)
+        if: contains(runner.os, 'ubuntu')
+        run: |
+            sudo apt-get update
+            sudo apt install clang
+      - name: Setup (OS X)
+        if: contains(runner.os, 'macos')
+        run: |
+            brew install llvm
+      - name: Run
+        run: sbt run 100000
+
