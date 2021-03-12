@@ -15,14 +15,14 @@ jobs:
       - name: Setup Java and Scala
         uses: olafurpg/setup-scala@v10
       - name: Setup (Linux)
-        if: contains(runner.os, 'ubuntu')
+        if: matrix.os == 'ubuntu-latest'
         run: |
             sudo apt-get update
             sudo apt install clang
       - name: Setup (OS X)
-        if: contains(runner.os, 'macos')
+        if: matrix.os == 'macos-latest'
         run: |
             brew install llvm
       - name: Run
-        run: sbt run 100000
+        run: sbt 'run 100000'
 
